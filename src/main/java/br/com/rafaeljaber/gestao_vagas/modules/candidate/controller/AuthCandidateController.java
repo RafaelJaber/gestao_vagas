@@ -2,6 +2,7 @@ package br.com.rafaeljaber.gestao_vagas.modules.candidate.controller;
 
 import br.com.rafaeljaber.gestao_vagas.modules.candidate.dto.AuthCandidateRequestDTO;
 import br.com.rafaeljaber.gestao_vagas.modules.candidate.useCases.AuthCandidateUseCase;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/candidate")
+@Tag(name = "Login", description = "Informações de login")
 public class AuthCandidateController {
 
     @Autowired
