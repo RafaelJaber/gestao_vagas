@@ -28,7 +28,7 @@ public class AuthCompanyUseCase {
     public String execute(AuthCompanyDTO authCompanyDTO) throws AuthenticationException {
         CompanyEntity company = this.companyRepository.findByUsername(authCompanyDTO.getUsername())
                 .orElseThrow(
-                        () -> new UsernameNotFoundException("Company not found")
+                        () -> new UsernameNotFoundException("Username/Password incorrect")
                 );
 
         // Verificar a senha
