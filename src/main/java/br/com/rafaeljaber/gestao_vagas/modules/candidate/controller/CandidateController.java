@@ -1,5 +1,6 @@
 package br.com.rafaeljaber.gestao_vagas.modules.candidate.controller;
 
+import br.com.rafaeljaber.gestao_vagas.modules.candidate.dto.ProfileCandidateResponseDTO;
 import br.com.rafaeljaber.gestao_vagas.modules.candidate.entities.CandidateEntity;
 import br.com.rafaeljaber.gestao_vagas.modules.candidate.useCases.CreateCandidateUseCase;
 import br.com.rafaeljaber.gestao_vagas.modules.candidate.useCases.ListAllJobsByFilterUseCase;
@@ -49,6 +50,21 @@ public class CandidateController {
 
     @GetMapping("/")
     @PreAuthorize("hasRole('CANDIDATE')")
+    @Tag(name = "Candidato", description = "Informações do candidato")
+    @Operation(summary = "Perfil do candidato", description = "Essa função é responsável por buscar as informações do perfil do candidato")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", content = {
+                    @Content(
+                            schema = @Schema(implementation = ProfileCandidateResponseDTO.class)
+                    )
+            }),
+            @ApiResponse(responseCode = "400", content = {
+                    @Content(
+                            schema = @Schema(implementation = String.class)
+                    )
+            })
+    })
+    @SecurityRequirement(name = "jwt_auth")
     public ResponseEntity<Object> get(HttpServletRequest request) {
         var idCandidate = request.getAttribute("candidate_id");
 
