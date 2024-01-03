@@ -23,6 +23,7 @@ public class SecurityConfig {
                     auth.requestMatchers(HttpMethod.POST,"/candidate/").permitAll();
                     auth.requestMatchers(HttpMethod.POST,"/company/").permitAll();
                     auth.requestMatchers(HttpMethod.POST, "/auth/company/").permitAll();
+                    auth.requestMatchers(HttpMethod.POST, "/candidate/auth").permitAll();
                     auth.anyRequest().authenticated();
                 })
                 .addFilterBefore(securityFilter, BasicAuthenticationFilter.class);
