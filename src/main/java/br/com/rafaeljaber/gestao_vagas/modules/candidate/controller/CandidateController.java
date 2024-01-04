@@ -1,7 +1,9 @@
 package br.com.rafaeljaber.gestao_vagas.modules.candidate.controller;
 
+import br.com.rafaeljaber.gestao_vagas.modules.candidate.dto.ApplyJobRequestDTO;
 import br.com.rafaeljaber.gestao_vagas.modules.candidate.dto.ProfileCandidateResponseDTO;
 import br.com.rafaeljaber.gestao_vagas.modules.candidate.entities.CandidateEntity;
+import br.com.rafaeljaber.gestao_vagas.modules.candidate.useCases.ApplyJobCandidateUseCase;
 import br.com.rafaeljaber.gestao_vagas.modules.candidate.useCases.CreateCandidateUseCase;
 import br.com.rafaeljaber.gestao_vagas.modules.candidate.useCases.ListAllJobsByFilterUseCase;
 import br.com.rafaeljaber.gestao_vagas.modules.candidate.useCases.ProfileCandidateUseCase;
@@ -37,6 +39,9 @@ public class CandidateController {
 
     @Autowired
     private ListAllJobsByFilterUseCase listAllJobsByFilterUseCase;
+
+    @Autowired
+    private ApplyJobCandidateUseCase applyJobCandidateUseCase;
 
 
     @PostMapping("/")
@@ -94,4 +99,32 @@ public class CandidateController {
         return ResponseEntity.ok().body(jobs);
     }
 
+    @PostMapping("/job/apply")
+    @PreAuthorize("hasRole('CANDIDATE')")
+    @Operation(summary = "Aplicar na vaga", description = "Essa função é responsável por realizar a aplicação na vaga.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", content = {
+                    @Content(
+                            array = @ArraySchema(schema = @Schema(implementation = JobEntity.class))
+                    )
+            })
+    })
+    @SecurityRequirement(name = "jwt_auth")
+    public ResponseEntity<Object> applyJob(
+            HttpServletRequest request,
+            @Valid @RequestBody ApplyJobRequestDTO applyJobRequestDTO
+    ) {
+        var idCandidate = request.getAttribute("candidate_id");
+
+        try {
+            var result = this.applyJobCandidateUseCase.execute(
+                    UUID.fromString(idCandidate.toString()),
+                    applyJobRequestDTO.getIdJob()
+            );
+            return ResponseEntity.ok().body(result);
+        } catch (Exception ex) {
+            System.out.println("Deu ruim");
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        }
+    }
 }
