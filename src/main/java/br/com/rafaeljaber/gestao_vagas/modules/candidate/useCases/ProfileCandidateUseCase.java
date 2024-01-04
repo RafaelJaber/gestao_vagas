@@ -1,10 +1,10 @@
 package br.com.rafaeljaber.gestao_vagas.modules.candidate.useCases;
 
+import br.com.rafaeljaber.gestao_vagas.exceptions.ProfileNotFoundException;
 import br.com.rafaeljaber.gestao_vagas.modules.candidate.dto.ProfileCandidateResponseDTO;
 import br.com.rafaeljaber.gestao_vagas.modules.candidate.entities.CandidateEntity;
 import br.com.rafaeljaber.gestao_vagas.modules.candidate.repository.ICandidateRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -17,7 +17,7 @@ public class ProfileCandidateUseCase {
 
     public ProfileCandidateResponseDTO execute(UUID idCandidate) {
         CandidateEntity candidate = this.candidateRepository.findById(idCandidate).orElseThrow(
-                () -> new UsernameNotFoundException("User not found")
+                () -> new ProfileNotFoundException()
         );
 
         return ProfileCandidateResponseDTO.builder()
