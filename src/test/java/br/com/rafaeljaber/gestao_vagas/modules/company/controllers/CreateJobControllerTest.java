@@ -6,6 +6,7 @@ import br.com.rafaeljaber.gestao_vagas.modules.company.repositories.ICompanyRepo
 import br.com.rafaeljaber.gestao_vagas.utils.TestUtils;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -43,6 +44,7 @@ public class CreateJobControllerTest {
     }
 
     @Test
+    @DisplayName("Should be able to create a new job")
     public void should_be_able_to_create_a_new_job() throws Exception {
 
         CompanyEntity company = CompanyEntity.builder()
@@ -60,16 +62,29 @@ public class CreateJobControllerTest {
                 .level("LEVEL_TEST")
                 .build();
 
-        var result = mvc.perform(MockMvcRequestBuilders.post("/company/job/")
+        mvc.perform(MockMvcRequestBuilders.post("/company/job/")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(TestUtils.objectToJson(createJobDTO))
                 .header("Authorization", TestUtils.generateToken(UUID.fromString(company.getId().toString()), "JAVAGAS_@123#"))
         )
                 .andExpect(MockMvcResultMatchers.status().isOk());
-
-        System.out.println(result);
     }
 
 
+    @Test
+    @DisplayName("Should not be able to create a new job with company not found")
+    public void should_not_be_able_to_create_a_new_job_with_company_not_found() throws Exception {
+        CreateJobDTO createJobDTO = CreateJobDTO.builder()
+                .benefits("BENEFITS_TEST")
+                .description("DESCRIPTION_TEST")
+                .level("LEVEL_TEST")
+                .build();
 
+        mvc.perform(MockMvcRequestBuilders.post("/company/job/")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(TestUtils.objectToJson(createJobDTO))
+                        .header("Authorization", TestUtils.generateToken(UUID.fromString(UUID.randomUUID().toString()), "JAVAGAS_@123#"))
+                )
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
+    }
 }
