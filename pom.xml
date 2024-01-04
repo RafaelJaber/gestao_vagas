@@ -15,6 +15,7 @@
     <description>gestao_vagas</description>
     <properties>
         <java.version>21</java.version>
+        <micrometer.version>1.12.0</micrometer.version>
     </properties>
     <dependencies>
         <dependency>
@@ -34,6 +35,11 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
 
         <dependency>
@@ -88,6 +94,12 @@
             <artifactId>h2</artifactId>
             <scope>test</scope>
             <version>2.2.220</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
+            <version>${micrometer.version}</version>
         </dependency>
 
     </dependencies>
